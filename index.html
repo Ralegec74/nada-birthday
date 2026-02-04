@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Do You Love Me?</title>
+    <style>
+        body {
+            background: url('https://i.pinimg.com/originals/2b/1d/91/2b1d91a3fd3b54c71e5939358f3ab473.gif') center center fixed;
+            background-size: cover;
+            font-family: 'Segoe Script', cursive, sans-serif;
+            color: #d6336c;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            background: rgba(255,255,255,0.85);
+            border-radius: 30px;
+            box-shadow: 0 8px 32px rgba(220, 38, 76, 0.15);
+            padding: 40px 30px;
+            text-align: center;
+            max-width: 400px;
+        }
+        .question {
+            font-size: 2em;
+            margin-bottom: 30px;
+        }
+        .btn {
+            background: linear-gradient(90deg, #ffb6b9 0%, #fae3d9 100%);
+            color: #d6336c;
+            border: none;
+            border-radius: 20px;
+            padding: 12px 30px;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin: 0 15px;
+            box-shadow: 0 2px 8px rgba(220, 38, 76, 0.10);
+            transition: background 0.3s, transform 0.2s;
+            position: relative;
+        }
+        #yesBtn {
+            font-size: 2em;
+            padding: 18px 40px;
+            transition: font-size 0.3s, padding 0.3s;
+        }
+        #noBtn {
+            z-index: 1000;
+            transition: font-size 0.3s, padding 0.3s, left 0.3s, top 0.3s, opacity 0.3s;
+            position: relative;
+        }
+        #noBtn.jumpy {
+            animation: jumpy 0.3s;
+        }
+        @keyframes jumpy {
+            0% { transform: translate(0, 0); }
+            30% { transform: translate(60px, -30px); }
+            60% { transform: translate(-60px, 30px); }
+            100% { transform: translate(0, 0); }
+        }
+        .sad-man {
+            display: none;
+            margin-top: 20px;
+            font-size: 3em;
+            animation: shake 0.8s infinite;
+        }
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+        .sad-messages {
+            display: none;
+            margin-top: 20px;
+            font-size: 1.3em;
+            color: #d6336c;
+            background: rgba(255,255,255,0.7);
+            border-radius: 20px;
+            padding: 15px;
+            max-width: 350px;
+            animation: fadeIn 0.5s;
+        }
+        /* Animated hearts for love page */
+        .love-page {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            animation: fadeIn 1s;
+            position: relative;
+        }
+        .pusheen-bg-container {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 70%;
+            width: 100%;
+            height: 140px;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .pusheen-gif {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 120px;
+            z-index: 0;
+            animation: movePusheen 6s linear infinite;
+        }
+        @keyframes movePusheen {
+            0% { left: 0; }
+            100% { left: calc(100vw - 140px); }
+        }
+        .love-message, .love-title, .hearts {
+            position: relative;
+            z-index: 2;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .hearts {
+            font-size: 2.5em;
+            color: #ff69b4;
+            margin-bottom: 20px;
+            animation: float 2s infinite ease-in-out;
+        }
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0); }
+        }
+        .love-title {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            color: #d6336c;
+        }
+        .love-message {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            color: #d6336c;
+            background: rgba(255,255,255,0.7);
+            border-radius: 20px;
+            padding: 20px;
+            min-height: 180px;
+            white-space: pre-line;
+        }
+        .typing-cursor {
+            display: inline-block;
+            width: 1ch;
+            animation: blink 1s steps(1) infinite;
+        }
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="questionPage">
+        <div class="question">Do you love me?</div>
+        <button class="btn" id="yesBtn">Yes 💖</button>
+        <button class="btn" id="noBtn">No 😢</button>
+        <div class="sad-man" id="sadMan">🥺</div>
+        <div class="sad-messages" id="sadMessages"></div>
+        <!-- Timer for Feb 5, 2026 -->
+        <div id="timer" style="margin-top:25px;font-size:1.3em;color:#d6336c;"></div>
+    </div>
+    <div class="love-page" id="lovePage">
+        <div class="pusheen-bg-container">
+            <img src="https://media1.tenor.com/m/ojCoQW3CkzoAAAAC/happybirthday-pusheen.gif" alt="Happy Birthday Pusheen" class="pusheen-gif" />
+        </div>
+        <div class="hearts">💖💕💗💞</div>
+        <div class="love-title">Happy Birthday, NADA My Love!</div>
+        <div class="love-message" id="loveMessage"></div>
+        <div class="hearts">💖💕💗💞</div>
+    </div>
+    <!-- Timer Lock Overlay -->
+    <div id="timerOverlay" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.95);z-index:9999;align-items:center;justify-content:center;color:#fff;font-size:2em;flex-direction:column;"></div>
+    <!-- Birthday Celebration Overlay -->
+    <div id="birthdayOverlay" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.95);z-index:10000;align-items:center;justify-content:center;flex-direction:column;color:#fff;text-align:center;"></div>
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const sadMan = document.getElementById('sadMan');
+        const sadMessages = document.getElementById('sadMessages');
+        const questionPage = document.getElementById('questionPage');
+        const lovePage = document.getElementById('lovePage');
+
+        // Make the No button move randomly across the whole page
+        // Reset No button position on mouseout
+        // Show sad man and messages if No is clicked
+        let noBtnSize = 1.2; // em
+        let yesBtnSize = 2; // em
+        let noBtnOffset = 0;
+        noBtn.addEventListener('click', function(e) {
+            sadMan.style.display = 'block';
+            // Shrink No button, grow Yes button, move No button away
+            noBtnSize = Math.max(0.6, noBtnSize - 0.2);
+            yesBtnSize = Math.min(3.5, yesBtnSize + 0.2);
+            noBtn.style.fontSize = noBtnSize + 'em';
+            noBtn.style.padding = (8 * noBtnSize) + 'px ' + (20 * noBtnSize) + 'px';
+            yesBtn.style.fontSize = yesBtnSize + 'em';
+            yesBtn.style.padding = (18 * yesBtnSize / 2) + 'px ' + (40 * yesBtnSize / 2) + 'px';
+            // Move No button further away horizontally
+            noBtnOffset += 60;
+            noBtn.style.left = noBtnOffset + 'px';
+            noBtn.style.opacity = Math.max(0.2, 1 - noBtnOffset / 300);
+            // Show sad messages
+            const messages = [
+                "What? 😢",
+                "How? 🥺",
+                "Why don't you love me too? 💔"
+            ];
+            let idx = 0;
+            sadMessages.style.display = 'block';
+            sadMessages.textContent = messages[idx];
+            function showNextMessage() {
+                idx++;
+                if (idx < messages.length) {
+                    setTimeout(() => {
+                        sadMessages.textContent = messages[idx];
+                        showNextMessage();
+                    }, 1200);
+                }
+            }
+            showNextMessage();
+        });
+        // Switch to love page if Yes is clicked
+        yesBtn.addEventListener('click', function() {
+            questionPage.style.display = 'none';
+            lovePage.style.display = 'flex';
+            typeLoveMessage();
+        });
+
+        // Timer for Feb 5, 2026 with lock overlay and birthday celebration
+        function showBirthdayOverlay() {
+            const birthdayOverlay = document.getElementById('birthdayOverlay');
+            birthdayOverlay.style.display = 'flex';
+            birthdayOverlay.innerHTML = `
+                <div style='font-size:2.5em;margin-bottom:20px;'>🎉 Happy Birthday Nada! 🎂</div>
+                <img src='https://gifdb.com/images/high/happy-birthday-animated-cake-pusheen-cat-sticker-wz9ap9s8hynul46y.webp' alt='Birthday Cake' style='width:220px;border-radius:20px;margin-bottom:30px;'>
+                <div style='font-size:1.5em;margin-bottom:20px;'>Wishing you joy, love, and lots of cake!</div>
+                <img src='https://media.tenor.com/mI4B528FYvgAAAAM/ily.gif' alt='Confetti' style='width:180px;margin-bottom:20px;'>
+                <div style='font-size:1.2em;'>May your day be as sweet as you are! 💖</div>
+            `;
+            setTimeout(() => { birthdayOverlay.style.display = 'none'; }, 12000); // Hide after 12 seconds
+        }
+        function updateTimer() {
+            const timerDiv = document.getElementById('timer');
+            const overlay = document.getElementById('timerOverlay');
+            const targetDate = new Date('2026-02-05T00:00:00');
+            const now = new Date();
+            const diff = targetDate - now;
+            if (diff > 0) {
+                // Lock the website
+                overlay.style.display = 'flex';
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                const minutes = Math.floor((diff / (1000 * 60)) % 60);
+                const seconds = Math.floor((diff / 1000) % 60);
+                overlay.innerHTML = `<div>Countdown to Feb 5, 2026</div><div style='margin-top:20px;'>${days}d ${hours}h ${minutes}m ${seconds}s</div>`;
+            } else {
+                overlay.style.display = 'none';
+                timerDiv.textContent = "It's Feb 5, 2026! 🎉";
+                showBirthdayOverlay();
+            }
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+        // Typing animation for love message
+        function typeLoveMessage() {
+           const message = `
+        My dearest Nada,
+
+        You mean a lot to me. What we shared was real, and every moment the laughs, the closeness, the memories mattered. Your presence brought warmth into my life, and I don’t take that lightly.
+
+        I also want to be clear about something: we actually have a lot more in common than you think. In how we see things, how we care, how we show up, and what we value. Differences exist, sure, but they never erased the core of what aligned between us.
+
+        We went through ups and downs, misunderstandings, and tough moments. It wasn’t perfect, but I stood in it honestly. Not because it was easy but because I believed what we had was worth effort, patience, and even discomfort. Some things are worth choosing even when they require sacrifice, and to me, you were one of those things.
+
+        On your birthday, I genuinely wish you happiness and peace. You deserve good things and a life that feels right for you. And I’ll say this clearly: I don’t see myself as just a chapter in your story I see myself as someone who could have been the story itself.
+
+        Happy Birthday. I wish you the best, today and always.
+
+                                            Hamza
+`;
+
+const loveMessageDiv = document.getElementById('loveMessage');
+loveMessageDiv.textContent = message;
+
+            loveMessageDiv.textContent = '';
+            let i = 0;
+            let cursor = document.createElement('span');
+            cursor.className = 'typing-cursor';
+            cursor.textContent = '|';
+            loveMessageDiv.appendChild(cursor);
+            function typeChar() {
+                if (i < message.length) {
+                    loveMessageDiv.insertBefore(document.createTextNode(message[i]), cursor);
+                    i++;
+                    setTimeout(typeChar, 30);
+                } else {
+                    cursor.remove();
+                }
+            }
+            typeChar();
+        }
+    </script>
+</body>
+</html>
